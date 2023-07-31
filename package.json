@@ -2,9 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.js",
-  "type": "module",
+  "main": "index.js",
+  "type": "commonjs",
   "scripts": {
+    "start": "node ./dist/main.js",
+    "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "nik",
