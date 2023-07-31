@@ -1,9 +1,13 @@
 import { Response, Router, Request, NextFunction } from "express";
-import { ExpressReturnType } from "../common/route.interface";
 import { BaseController } from "../common/base.controller";
+import { inject, injectable } from "inversify";
+import "reflect-metadata";
+import { ILogger } from "../logger/logger.interface";
+import { TYPES } from "../types";
 
+@injectable()
 export class UserController extends BaseController {
-  constructor() {
+  constructor(@inject(TYPES.Logger) private logger: ILogger) {
     super();
     this.bindRoutes([
       { path: "/login", method: "post", func: this.login },

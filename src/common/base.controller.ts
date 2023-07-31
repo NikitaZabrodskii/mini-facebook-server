@@ -1,6 +1,9 @@
 import { Response, Router } from "express";
 import { ExpressReturnType, IControllerRoute } from "../common/route.interface";
+import { injectable } from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export abstract class BaseController {
   private readonly _router: Router;
 
