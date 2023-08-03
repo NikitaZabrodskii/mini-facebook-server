@@ -7,8 +7,8 @@ import { TYPES } from "../types";
 
 @injectable()
 export class UserController extends BaseController {
-  constructor(@inject(TYPES.Logger) private logger: ILogger) {
-    super();
+  constructor(@inject(TYPES.Logger) logger: ILogger) {
+    super(logger);
     this.bindRoutes([
       { path: "/login", method: "post", func: this.login },
       { path: "/register", method: "post", func: this.register },

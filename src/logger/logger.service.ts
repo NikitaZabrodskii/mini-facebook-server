@@ -8,7 +8,7 @@ export class LoggerService implements ILogger {
   public logger: Logger<ILogObj>;
 
   constructor() {
-    this.logger = new Logger({ type: "hidden", name: "mini-logger" });
+    this.logger = new Logger({ name: "mini-logger" });
   }
 
   log(...args: unknown[]): void {

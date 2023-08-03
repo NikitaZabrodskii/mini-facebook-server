@@ -11,35 +11,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.App = void 0;
-const express_1 = __importDefault(require("express"));
-const user_controller_1 = require("./users/user.controller");
+exports.UserController = void 0;
+const base_controller_1 = require("../common/base.controller");
 const inversify_1 = require("inversify");
-const types_1 = require("./types");
-let App = exports.App = class App {
-    constructor(userController, logger) {
-        this.userController = userController;
-        this.logger = logger;
-        this.app = (0, express_1.default)();
-        this.port = 8000;
+require("reflect-metadata");
+const types_1 = require("../types");
+let UserController = exports.UserController = class UserController extends base_controller_1.BaseController {
+    constructor(logger) {
+        super(logger);
+        this.bindRoutes([
+            { path: "/login", method: "post", func: this.login },
+            { path: "/register", method: "post", func: this.register },
+        ]);
     }
-    useRoutes() {
-        this.app.use("/users", this.userController.router);
+    login(req, res, next) {
+        this.send(res, 200, "login");
     }
-    init() {
-        this.server = this.app.listen(this.port);
-        this.useRoutes();
-        this.logger.log("server started");
+    register(req, res, next) {
+        this.send(res, 200, "register");
     }
 };
-exports.App = App = __decorate([
+exports.UserController = UserController = __decorate([
     (0, inversify_1.injectable)(),
-    __param(0, (0, inversify_1.inject)(types_1.TYPES.UserController)),
-    __param(1, (0, inversify_1.inject)(types_1.TYPES.Logger)),
-    __metadata("design:paramtypes", [user_controller_1.UserController, Object])
-], App);
-//# sourceMappingURL=app.js.map
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.Logger)),
+    __metadata("design:paramtypes", [Object])
+], UserController);
+//# sourceMappingURL=user.controller.js.map
