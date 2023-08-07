@@ -16,7 +16,6 @@ export abstract class BaseController {
     return this._router;
   }
 
-  ///auto responses for frontend
   public send<T>(res: Response, code: number, message: T): ExpressReturnType {
     res.type("application/json");
     return res.status(code).json(message);
@@ -30,13 +29,13 @@ export abstract class BaseController {
     return res.sendStatus(201);
   }
 
-  ///binding routes
-
   protected bindRoutes(routes: IControllerRoute[]) {
     for (const route of routes) {
       this.logger.log(`[${route.method}] ${route.path}`);
+      const middleware = route.middleware?.map((m) => m.execute.bind(m));
       const handler = route.func.bind(this);
-      this.router[route.method](route.path, handler);
+      const pipeline = middleware ? [...middleware, handler] : handler;
+      this.router[route.method](route.path, pipeline);
     }
   }
 }

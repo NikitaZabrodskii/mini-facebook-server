@@ -13,18 +13,30 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
   email String @unique
-  role String 
+  password String
   name String
+  role String @default("user")
   posts Post[]
-  
 }
 
 model Post{
   id Int @id @default(autoincrement())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
   title      String
+  description String
+  image String?
   author     User       @relation(fields: [authorId], references: [id])
   authorId   Int
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  likes Like[]
+
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+  userId String 
+  postId Int
+  createdAt  DateTime   @default(now())
+  post Post @relation(fields:[postId], references: [id], onDelete: Cascade)
 }
 
