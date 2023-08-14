@@ -15,7 +15,7 @@ export class ConfigService {
     }
 
     this.config = result.parsed as DotenvParseOutput;
-    this.logger.log("[ConfigService] can't read env");
+    this.logger.log("[ConfigService] successfully read env");
   }
 
   get(key: string) {

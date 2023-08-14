@@ -40,8 +40,8 @@ export class UserService {
 
     const newUser = new User(
       existedUser.email,
-      existedUser.password,
-      existedUser.name
+      existedUser.name,
+      existedUser.password
     );
 
     return newUser.comparePasswords(password);

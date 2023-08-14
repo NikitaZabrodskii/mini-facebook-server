@@ -9,26 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoggerService = void 0;
-const tslog_1 = require("tslog");
-require("reflect-metadata");
-const inversify_1 = require("inversify");
-let LoggerService = exports.LoggerService = class LoggerService {
-    constructor() {
-        this.logger = new tslog_1.Logger({ name: "mini-logger" });
-    }
-    log(...args) {
-        this.logger.info(...args);
-    }
-    error(...args) {
-        this.logger.error(...args);
-    }
-    warn(...args) {
-        this.logger.warn(...args);
-    }
-};
-exports.LoggerService = LoggerService = __decorate([
-    (0, inversify_1.injectable)(),
-    __metadata("design:paramtypes", [])
-], LoggerService);
-//# sourceMappingURL=logger.service.js.map
+exports.userLoginDto = void 0;
+const class_validator_1 = require("class-validator");
+class userLoginDto {
+}
+exports.userLoginDto = userLoginDto;
+__decorate([
+    (0, class_validator_1.IsEmail)({}, { message: "wrong email" }),
+    __metadata("design:type", String)
+], userLoginDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsString)({ message: "password should be in 5-20 diapason" }),
+    (0, class_validator_1.Length)(5, 20),
+    __metadata("design:type", String)
+], userLoginDto.prototype, "password", void 0);
+//# sourceMappingURL=user-login.dto.js.map

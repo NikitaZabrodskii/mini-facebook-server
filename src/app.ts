@@ -6,6 +6,7 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "./types";
 import { PrismaService } from "./database/prisma.service";
 import { json } from "body-parser";
+import { JWTController } from "./common/jwt.controller";
 
 @injectable()
 export class App {
@@ -14,6 +15,7 @@ export class App {
   port: number;
 
   constructor(
+    @inject(TYPES.JWTController) private jwtController: JWTController,
     @inject(TYPES.UserController) private userController: UserController,
     @inject(TYPES.Logger) private logger: ILogger,
     @inject(TYPES.PrismaService) private prisma: PrismaService
@@ -22,15 +24,25 @@ export class App {
     this.port = 8000;
   }
 
+  useCheckToken() {
+    this.app.use(this.jwtController.checkJWT);
+  }
+
+  useRequireUser() {
+    this.app.use(this.userController.requireUser);
+  }
+
   useBodyParser(): void {
     this.app.use(json());
   }
 
   private useRoutes() {
-    this.app.use("/users", this.userController.router);
+    this.app.use("/auth", this.userController.router);
   }
 
   public async init() {
+    this.useCheckToken();
+    this.useRequireUser();
     this.useBodyParser();
     this.useRoutes();
     await this.prisma.connect();

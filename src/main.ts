@@ -8,6 +8,7 @@ import { ConfigService } from "./config/config.service";
 import { PrismaService } from "./database/prisma.service";
 import { UserRepository } from "./users/user.repository";
 import { UserService } from "./users/user.service";
+import { JWTController } from "./common/jwt.controller";
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
@@ -17,6 +18,7 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<PrismaService>(TYPES.PrismaService).to(PrismaService);
   bind<UserRepository>(TYPES.UserRepository).to(UserRepository);
   bind<UserService>(TYPES.UserService).to(UserService);
+  bind<JWTController>(TYPES.JWTController).to(JWTController);
 });
 
 function start() {
