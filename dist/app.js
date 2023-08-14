@@ -32,6 +32,7 @@ const types_1 = require("./types");
 const prisma_service_1 = require("./database/prisma.service");
 const body_parser_1 = require("body-parser");
 const jwt_controller_1 = require("./common/jwt.controller");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 let App = exports.App = class App {
     constructor(jwtController, userController, logger, prisma) {
         this.jwtController = jwtController;
@@ -41,22 +42,22 @@ let App = exports.App = class App {
         this.app = (0, express_1.default)();
         this.port = 8000;
     }
-    useCheckToken() {
-        this.app.use(this.jwtController.checkJWT);
-    }
-    useRequireUser() {
-        this.app.use(this.userController.requireUser);
-    }
     useBodyParser() {
         this.app.use((0, body_parser_1.json)());
     }
     useRoutes() {
         this.app.use("/auth", this.userController.router);
+        this.app.get("/unprotected", (req, res) => {
+            console.log(req.cookies);
+            res.send("unprotected").json();
+        });
+        this.app.get("/protected", this.jwtController.checkJWT, (req, res) => {
+            res.send("protected").json();
+        });
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.useCheckToken();
-            this.useRequireUser();
+            this.app.use((0, cookie_parser_1.default)());
             this.useBodyParser();
             this.useRoutes();
             yield this.prisma.connect();

@@ -58,8 +58,8 @@ let UserController = exports.UserController = class UserController extends base_
             if (!result) {
                 return this.send(res, 401, "Invalid credentials");
             }
-            const accessToken = this.jwtController.signJWT(body.email, "5m");
-            const refreshToken = this.jwtController.signJWT(body.email, "1y");
+            const accessToken = this.jwtController.createAccessToken(body.email);
+            const refreshToken = this.jwtController.createRefreshToken(body.email);
             res.cookie("accessToken", accessToken, {
                 maxAge: 300000,
                 httpOnly: true,
@@ -97,14 +97,6 @@ let UserController = exports.UserController = class UserController extends base_
     getSessionHandler(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.send(res, 200, req.user);
-        });
-    }
-    requireUser(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!req.user) {
-                return this.send(res, 200, "logged out");
-            }
-            return next();
         });
     }
 };

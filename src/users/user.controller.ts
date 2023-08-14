@@ -47,9 +47,8 @@ export class UserController extends BaseController {
       return this.send(res, 401, "Invalid credentials");
     }
 
-    /// create tokens
-    const accessToken = this.jwtController.signJWT(body.email, "5m");
-    const refreshToken = this.jwtController.signJWT(body.email, "1y");
+    const accessToken = this.jwtController.createAccessToken(body.email);
+    const refreshToken = this.jwtController.createRefreshToken(body.email);
 
     res.cookie("accessToken", accessToken, {
       maxAge: 300000,
@@ -95,18 +94,9 @@ export class UserController extends BaseController {
     return this.send(res, 200, "logged out");
   }
 
+  /// probably i need it
   async getSessionHandler(req: Request, res: Response) {
     //@ts-ignore
     return this.send(res, 200, req.user);
-  }
-
-  async requireUser(req: Request, res: Response, next: NextFunction) {
-    //@ts-ignore
-    if (!req.user) {
-      ///
-      return this.send(res, 200, "logged out");
-    }
-
-    return next();
   }
 }

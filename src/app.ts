@@ -7,6 +7,7 @@ import { TYPES } from "./types";
 import { PrismaService } from "./database/prisma.service";
 import { json } from "body-parser";
 import { JWTController } from "./common/jwt.controller";
+import cookieParser from "cookie-parser";
 
 @injectable()
 export class App {
@@ -24,25 +25,28 @@ export class App {
     this.port = 8000;
   }
 
-  useCheckToken() {
-    this.app.use(this.jwtController.checkJWT);
-  }
-
-  useRequireUser() {
-    this.app.use(this.userController.requireUser);
-  }
-
   useBodyParser(): void {
     this.app.use(json());
   }
 
   private useRoutes() {
     this.app.use("/auth", this.userController.router);
+    this.app.get("/unprotected", (req, res) => {
+      console.log(req.cookies);
+      res.send("unprotected").json();
+    });
+
+    this.app.get(
+      "/protected",
+      this.jwtController.checkJWT.bind(this.jwtController),
+      (req, res) => {
+        res.send("protected").json();
+      }
+    );
   }
 
   public async init() {
-    this.useCheckToken();
-    this.useRequireUser();
+    this.app.use(cookieParser());
     this.useBodyParser();
     this.useRoutes();
     await this.prisma.connect();
